@@ -22,7 +22,7 @@
 
 ####创建模版文本步骤
 #####plop
-#####? 选择多页应用
+#####?  Please choose a generator 选择多页应用
 #####? 请输入文件名称 index
 #####? 请输入文件创建目录 src/pages/index
 

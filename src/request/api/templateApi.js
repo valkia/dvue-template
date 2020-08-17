@@ -11,7 +11,7 @@ const templateApi = {
     template1(params) {
         return axios.post(`${base.baseUrl}/xxx`, qs.stringify(params));
     },
-    template2(params) { 参数params 是json格式
+    template2(params) { //参数params 是json格式
         return axios.post(`${base.baseUrl}/xxx`, params);
     }
 }
