@@ -1,0 +1,42 @@
+<template>
+    <div id="page-{{name}}">
+    </div>
+</template>
+
+<script>
+
+    export default {
+        name: "page-{{name}}",
+        data: function () {
+            return {
+            };
+        },
+        components: {
+        }
+    };
+</script>
+
+<style>
+    #page-{{name}} {
+        font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+    }
+
+
+    html {
+        height: 100%;
+        background: white;
+        font-family: Microsoft YaHei;
+    }
+    html {
+        font-size: 11px;
+    }
+
+    body {
+        margin: 0px;
+
+    }
+</style>
