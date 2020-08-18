@@ -11,14 +11,13 @@
 
 2.npm config set registry https://registry.npm.taobao.org
 
-3.vue create xxx / npm install
+3.npm install
 
 4.如果npm run serve不能启动，需要npm install -g @vue/cli
 
 解决chrome跨域问题
 右键chrome图标，在目标：最后加上 --disable-web-security --user-data-dir   （最前面有空格）
 
-打开项目前需要先生成一次页面模版（page）
 
 ####创建模版文本步骤
 #####plop

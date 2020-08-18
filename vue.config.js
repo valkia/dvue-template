@@ -33,7 +33,7 @@ module.exports = {
     lintOnSave: false, //禁用eslint
     //baseUrl: '/',
     productionSourceMap: false,
-    publicPath: '/publicPath/',
+    publicPath: '/projectName/',
     pages,
     devServer: {
         index: 'index.html',

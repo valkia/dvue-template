@@ -1,0 +1,15 @@
+import Vue from 'vue'
+import App from './index.vue'
+import api from '../../request/api/api' // 导入api接口
+
+import 'element-ui/lib/theme-chalk/index.css';
+//import { Button, Select,Row,Col,Pagination,Loading } from 'element-ui';
+Vue.prototype.$api = api; // 将api挂载到vue的原型上
+
+Vue.config.productionTip = false
+
+//Vue.use(Button)
+
+new Vue({
+    render: h => h(App),
+}).$mount('#page-index')
