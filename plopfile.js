@@ -38,6 +38,26 @@ module.exports = function (plop) {
                 type: 'add', // 动作类型
                 path: '{{ path }}/components/{{ name }}.vue', // '{{  }}' 双大括号内设置动态参数
                 templateFile: 'plop-templates/views/components.hbs' // 模板文件地址， 使用hbs文件
+            },
+            //创建一个axiosApi文件
+            {
+                type: 'add', // 动作类型
+                path: 'src/request/api/{{ name }}Api.js',
+                templateFile: 'plop-templates/views/api.hbs'
+            },
+            //Api文件关联到api里
+            {
+                type: 'modify', // 修改文件
+                path: 'src/request/api/api.js',
+                pattern:/\/\/引入其他模块的接口Api/g,
+                template:'import {{name}}Api from \'./{{name}}Api\';\n//引入其他模块的接口Api'
+            },
+            //Api文件关联到api里
+            {
+                type: 'modify', // 修改文件
+                path: 'src/request/api/api.js',
+                pattern:/\/\/导出其他模块的接口Api/g,
+                template:'{{name}}Api,\n//导出其他模块的接口Api'
             }
         ]
 

@@ -1,0 +1,30 @@
+/**
+ * {{name}}接口列表
+ */
+
+import base from './base'; // 导入接口域名列表
+import axios from '../http'; // 导入http中创建的axios实例
+import qs from 'qs'; // 根据需求是否导入qs模块
+
+/*用法：
+*                   let params = {};
+*                   this.$api.{{name}}Api
+                    .test(params)
+                    .then(res => {
+                        console.log(res);
+                    }).catch(err => {
+                        console.log(err);
+                    });
+* */
+
+const {{name}}Api = {
+    //参数 qs.stringify(params) 是form格式，params 是json格式
+    test(params) {
+        return axios.post(`${base.baseUrl}/xxx/queryXxx`, params);
+    },
+    test1(params) {
+        return axios.post(`${base.baseUrl}/xxx/queryXxx`, qs.stringify(params));
+    }
+}
+
+export default {{name}}Api;
