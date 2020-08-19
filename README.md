@@ -1,6 +1,5 @@
 结合plop命令生成代码的vue多页面模版
 
-
 项目目录cd \src\main\webapp
 
 设置淘宝镜像 npm install -g cnpm --registry=https://registry.npm.taobao.org
@@ -18,9 +17,13 @@
 解决chrome跨域问题
 右键chrome图标，在目标：最后加上 --disable-web-security --user-data-dir   （最前面有空格）
 
+修改npm run serve默认启动页面的位置：vue.config.js devServer: index: index.html
+
+多页面的情况下，在地址栏 [项目名]/[页面模版名].html 修改成对应的页面模版名 
+
 
 ####创建模版文本步骤
-#####plop
+#####npm run plop
 #####?  Please choose a generator 选择多页应用
 #####? 请输入文件名称 index
 #####? 请输入文件创建目录 src/pages/index
@@ -34,8 +37,6 @@ npm install
 ```
 
 ### Compiles and hot-reloads for development
-#### 默认启动index 修改位置：vue.config.js devServer: index: index.html
-#### 多页面的情况下，在地址栏 [项目名]/[页面模版名].html 修改成对应的页面模版名 
 ```
 npm run serve
 ```
