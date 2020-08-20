@@ -1,11 +1,15 @@
 module.exports = {
-    bind: function (el, binding) { // 每当指令绑定到元素上的时候，会立即执行这个bind函数，只执行一次
+    componentUpdated: function (el, binding) { // 值有可能是异步获取，需要在componentUpdated后才能拿到
         const activeClassName = binding.value.activeClassName;
         const className = binding.value.className;
+        const curIndex = binding.value.curIndex;
         el.children.forEach(c => {
             c.classList.add(className);
         })//给子元素css
-        el.children[0].classList.add(activeClassName);//默认选中第一个
+        if (curIndex === 0) {
+            el.children[0].classList.add(activeClassName);//默认选中第一个
+        }
+
 
     },
     inserted: function (el) { // inserted 表示元素插入到DOM中的时候，会执行inserted函数【触发一次】
@@ -18,7 +22,10 @@ module.exports = {
         const oldCurIndex = binding.oldValue.curIndex;
 
         if (newCurIndex != oldCurIndex) {
-            el.children[oldCurIndex].classList.remove(activeClassName);
+            if (oldCurIndex >= 0) {
+                el.children[oldCurIndex].classList.remove(activeClassName);
+            }
+
             el.children[newCurIndex].classList.add(activeClassName);
         }
 
