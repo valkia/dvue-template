@@ -36,7 +36,7 @@ module.exports = function (plop) {
             //components
             {
                 type: 'add', // 动作类型
-                path: '{{ path }}/components/{{ name }}.vue', // '{{  }}' 双大括号内设置动态参数
+                path: '{{ path }}/components/{{properCase name }}.vue', // '{{  }}' 双大括号内设置动态参数
                 templateFile: 'plop-templates/views/components.hbs' // 模板文件地址， 使用hbs文件
             },
             //创建一个axiosApi文件
