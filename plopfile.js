@@ -86,6 +86,35 @@ module.exports = function (plop) {
             }
         ]
 
-    })
+    });
+
+    plop.setGenerator("管理后台-上下结构", {
+        description: '创建上面是列表页，下面是编辑页的管理页(需要先创建admin的多页应用")',
+        prompts: [
+            {
+                type: 'input',  // 交互类型
+                name: 'name',   // 参数名称
+                message: '请输入文件名称' // 交互提示
+            },
+            {
+                type: 'input',
+                name: 'path',
+                message: '请输入文件创建目录'
+            }
+        ],
+        actions: function () {
+            console.log("如果运行admin的多页应用命令需要手动在request/api/下创建adminApi.js");
+            console.log("在adminApi.js中增加对应增删改查方法");
+            return [
+                //components
+                {
+                    type: 'add', // 动作类型
+                    path: '{{ path }}/{{properCase name}}.vue', // '{{  }}' 双大括号内设置动态参数
+                    templateFile: 'plop-templates/views/admin-up-down.hbs' // 模板文件地址， 使用hbs文件
+                }
+            ]
+        }
+
+    });
 
 }

@@ -1,0 +1,244 @@
+<template>
+    <div class="{{name}}-wrap">
+        <div>
+            <div class="title-row">
+                <div class="title">用户管理</div>
+                <el-form :inline="true" :model="search">
+                    <el-form-item label="用户名">
+                        <el-input v-model="search.loginName" placeholder="用户名"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div class="main-button" @click="getListBySearch()">查询</div>
+            </div>
+            <div class="table-content" v-loading="tableLoading">
+                <AdminTable :tableProp="tableProp" :tableData="tableData" v-on:selected-data="selectedItem"
+                            v-on:dblclick-data="dblclick" height="380"></AdminTable>
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-size="pageSize"
+                        layout="prev, pager, next, jumper"
+                        :total="dataSize">
+                </el-pagination>
+            </div>
+            <div class="edit-content">
+
+                <el-form :model="edit" :ref="formName" :rules="rules" label-width="90px">
+                    <el-row type="flex">
+                        <el-col>
+                            <el-form-item label="用户名" prop="loginName">
+                                <el-input v-model="edit.loginName"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="密码" prop="password">
+                                <el-input v-model="edit.password" type="password"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="角色" prop="role">
+                                <el-select v-model="edit.role" placeholder="角色">
+                                    <el-option label="管理员" value="管理员"></el-option>
+                                    <el-option label="普通用户" value="普通用户"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="状态" prop="status">
+                                <el-select v-model="edit.status" placeholder="状态">
+                                    <el-option label="正常" value="正常"></el-option>
+                                    <el-option label="停用" value="停用"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="4">
+                            <div class="main-button" @click="submitForm">保存</div>
+                            <div class="main-button" @click="del">删除</div>
+                        </el-col>
+                    </el-row>
+                </el-form>
+
+            </div>
+        </div>
+    </div>
+
+</template>
+<script>
+    import AdminTable from './components/AdminTable'
+
+    const apiName = "adminApi";
+    //todo 增删改查的方法名
+    const queryMethodName = "query{{properCase name}}";
+    const addMethodName = "add{{properCase name}}";
+    const updateMethodName = "update{{properCase name}}";
+    const delMethodName = "del{{properCase name}}";
+
+    const formName = "{{properCase name}}Form";
+
+    export default {
+        name: "{{properCase name}}",
+        props: {},
+        components: {AdminTable},
+        data: function () {
+            return {
+                api: {
+                    query: this.$api[apiName][queryMethodName],
+                    add: this.$api[apiName][addMethodName],
+                    update: this.$api[apiName][updateMethodName],
+                    del: this.$api[apiName][delMethodName],
+                },
+                formName,
+                userProps: {
+                    "status": ["正常", "停用"],
+                    "role": ["管理员", "普通用户"]
+                },
+                tableLoading: false,
+                rules: {
+                    loginName: [{required: true, message: '请输入', trigger: 'change'}],
+                    status: [{required: true, message: '请选择', trigger: 'change'}],
+                    role: [{required: true, message: '请选择', trigger: 'change'}],
+                    password: [
+                        {required: true, message: '请输入', trigger: 'blur'},
+                        {min: 6, message: '密码长度大于6', trigger: 'blur'}
+                    ]
+                },
+                search: {},
+                edit: {},
+                tableProp: [
+                    {label: '用户名', prop: 'loginName'},
+                    {label: '角色', prop: 'role'},
+                    {label: '状态', prop: 'status'}],
+                tableData: [],
+                currentPage: 1,
+                pageSize: 10,
+                dataSize: 0,
+                dblData: {}
+            };
+        },
+        methods: {
+            dblclick(item) {
+                this.dblData = item;
+            },
+            selectedItem(item) {
+                if (this.edit.id === item.id) {
+                    //已经选中的情况下 取消选中
+                    this.edit = {};
+                    return;
+                }
+                console.log(item);
+                this.edit = JSON.parse(JSON.stringify(item));//深拷贝一下
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.getList();
+            },
+            selectData(item) {
+                console.log(`选中: ${item}`);
+            },
+            submitForm() {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        console.log(this.edit);
+                        if (this.edit.id) {
+                            this.api.update(this.edit).then(res => {
+                                if (res.code == "0") {
+                                    this.$message({
+                                        type: 'success',
+                                        message: '修改成功'
+                                    });
+                                    this.getList();
+                                }
+
+                            }).catch(e => {
+                            })
+                        } else {
+                            this.api.add(this.edit).then(res => {
+                                if (res.code == "0") {
+                                    this.$message({
+                                        type: 'success',
+                                        message: '新增成功'
+                                    });
+                                    this.getList();
+                                }
+                            }).catch(e => {
+                            })
+                        }
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            del() {
+                if (!this.edit.id) {
+                    this.$message({
+                        type: 'error',
+                        message: '请先选择一条数据'
+                    });
+                    return;
+                }
+
+                this.api.del(this.edit).then(res => {
+                    if (res.code == '0') {
+                        this.getList();
+                        this.edit = {};
+                        this.$refs[formName].resetFields();//清楚校验提示
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功'
+                        });
+                    }
+                });
+            },
+            getList() {
+                this.tableLoading = true;
+                let pageNum = this.currentPage;
+                let pageSize = this.pageSize;
+                this.api.query({pageNum, pageSize, data: this.search}).then(res => {
+                    if (res.code === 0) {
+
+                        this.tableData = res.data.list;
+                        this.dataSize = res.data.total;
+                    }
+
+                }).catch(e => {
+                }).finally(() => {
+                    this.tableLoading = false;
+                })
+            },
+            getListBySearch() {
+                this.edit = {};
+                this.$refs[formName].resetFields();//清楚校验提示
+                this.currentPage = 1;
+                this.getList();
+            }
+        },
+        computed: {},
+        filters: {},
+        mounted: function () {
+            this.getList();
+        }
+
+
+    };
+
+
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+    >>> .el-input__inner {
+        max-width: unset;;
+    }
+
+    >>> .el-select {
+        display: block;
+    }
+
+</style>
