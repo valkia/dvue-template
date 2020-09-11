@@ -67,6 +67,7 @@
 
 </template>
 <script>
+    //todo 引入路径可能需要修改
     import AdminTable from './components/AdminTable'
 
     const apiName = "adminApi";
@@ -126,6 +127,7 @@
                 if (this.edit.id === item.id) {
                     //已经选中的情况下 取消选中
                     this.edit = {};
+                    this.$refs[formName].resetFields();//清除校验提示
                     return;
                 }
                 console.log(item);
